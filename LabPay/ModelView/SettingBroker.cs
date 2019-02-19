@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -16,13 +18,16 @@ namespace LabPay.ModelView
     {
 
         public ICommand BackToHomeClicked { get; set; }
-        public ICommand ConnectClicked { get; set; }
+        public ICommand ConnectTestClicked { get; set; }
 
         public SettingBroker(SettingBrokerPage mainPage)
         {
             page = mainPage;
-            BackToHomeClicked = new RelayCommand(MoveMainMenuPage);
-            ConnectClicked = new RelayCommand(ConnectBroker);
+            BackToHomeClicked = new RelayCommand(MoveMainMenuPage, CanGoBack);
+            ConnectTestClicked = new RelayCommand(ConnectTest, CanGoBack);
+            ConnectTesting = false;
+            IpAddress = "localhost";
+            Port = "65500";
         }
 
         private void MoveMainMenuPage()
@@ -30,8 +35,57 @@ namespace LabPay.ModelView
             page.Frame.Navigate(typeof(MainPage));
         }
 
-        private async void ConnectBroker()
+        private async void ConnectTest()
         {
+            ConnectTesting = true;
+            TcpClient tcp = new TcpClient(AddressFamily.InterNetwork);
+            try
+            {
+                await tcp.ConnectAsync(IpAddress, int.Parse(Port));
+            }
+            catch
+            {
+                var invalidIpAddressDialog = new ContentDialog
+                {
+                    Title = "Failed to connect server.",
+                    Content = "Check your host ip address and port and try again.",
+                    CloseButtonText = "OK"
+                };
+                ContentDialogResult result = await invalidIpAddressDialog.ShowAsync();
+                return;
+            }
+
+
+            NetworkStream ns = tcp.GetStream();
+            ns.ReadTimeout = 5000;
+            ns.WriteTimeout = 5000;
+            Encoding enc = Encoding.UTF8;
+            byte[] sendBytes = enc.GetBytes("Test Command OK");
+            await ns.WriteAsync(sendBytes, 0, sendBytes.Length);
+            Debug.WriteLine(sendBytes);
+
+            MemoryStream ms = new MemoryStream();
+            byte[] resBytes = new byte[256];
+            int resSize = 0;
+            do
+            {
+                resSize = ns.Read(resBytes, 0, resBytes.Length);
+                if (resSize == 0)
+                {
+                    break;
+                }
+                ms.Write(resBytes, 0, resSize);
+            } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
+            var resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+            ms.Close();
+
+            Debug.WriteLine(resMsg);
+
+            ns.Close();
+            tcp.Close();
+            ConnectTesting = false;
+
+            return;
             if (CheckIpAddress(IpAddress))
             {
                 //check start
@@ -73,6 +127,46 @@ namespace LabPay.ModelView
             return true;
         }
 
+        private bool _connectTesting;
+        public bool ConnectTesting
+        {
+            get
+            {
+                return _connectTesting;
+            }
+            set
+            {
+                _connectTesting = value;
+                NotifyPropertyChanged("BackToHomeEnabled");
+                NotifyPropertyChanged("ConnectTestEnabled");
+            }
+        }
+
+
+        private bool CanGoBack()
+        {
+            return !ConnectTesting;
+        } 
+
+        
+        public bool BackToHomeEnabled
+        {
+            get
+            {
+                return !ConnectTesting;
+            }
+        }
+
+        public bool ConnectTestEnabled
+        {
+            get
+            {
+                return !ConnectTesting;
+            }
+        }
+
+
+
         private string _ipAddress;
         public string IpAddress
         {
@@ -84,6 +178,20 @@ namespace LabPay.ModelView
             {
                 _ipAddress = value;
                 NotifyPropertyChanged("IpAddress");
+            }
+        }
+
+        private string _port;
+        public string Port
+        {
+            get
+            {
+                return _port;
+            }
+            set
+            {
+                _port = value;
+                NotifyPropertyChanged("Port");
             }
         }
 
