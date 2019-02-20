@@ -39,7 +39,7 @@ namespace LabPay.ModelView
             if(await CustomIO.ExistFile() == false)
             {
                 PageStack.Push(page.GetType());
-                page.Frame.Navigate(typeof(SettingBrokerPage), PageStack);
+                page.Frame.Navigate(typeof(SettingServerPage), PageStack);
             }
         }        
 

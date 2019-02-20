@@ -125,7 +125,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelView\Configuration.cs" />
-    <Compile Include="ModelView\SettingBroker.cs" />
+    <Compile Include="ModelView\SettingServer.cs" />
     <Compile Include="ModelView\MainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ConfigurationPage.xaml.cs">
@@ -134,8 +134,8 @@
     <Compile Include="View\SelectProductsPage.xaml.cs">
       <DependentUpon>SelectProductsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingBrokerPage.xaml.cs">
-      <DependentUpon>SettingBrokerPage.xaml</DependentUpon>
+    <Compile Include="View\SettingServerPage.xaml.cs">
+      <DependentUpon>SettingServerPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +173,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingBrokerPage.xaml">
+    <Page Include="View\SettingServerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

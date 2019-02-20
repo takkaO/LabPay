@@ -46,7 +46,7 @@ namespace LabPay.ModelView
         private void MoveServerSettingPage()
         {
             PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(SettingBrokerPage), PageStack);
+            page.Frame.Navigate(typeof(SettingServerPage), PageStack);
         }
 
         public bool BackToBeforePageEnabled

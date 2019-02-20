@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LabPay.Common;
+using LabPay.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,20 +10,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using LabPay.Common;
-using LabPay.View;
 using Windows.UI.Xaml.Controls;
 
 namespace LabPay.ModelView
 {
-    class SettingBroker : INotifyPropertyChanged
+    class SettingServer : INotifyPropertyChanged
     {
 
         public ICommand BackToBeforePageClicked { get; set; }
         public ICommand ConnectTestClicked { get; set; }
 
 
-        public SettingBroker(SettingBrokerPage mainPage)
+        public SettingServer(SettingServerPage mainPage)
         {
             page = mainPage;
             BackToBeforePageClicked = new RelayCommand(BackToBeforePage, CanGoBack);
@@ -165,9 +165,9 @@ namespace LabPay.ModelView
         {
             Debug.WriteLine(BackToBeforePageEnabled);
             return !ConnectTesting;
-        } 
+        }
 
-        
+
         public bool BackToBeforePageEnabled
         {
             get
@@ -214,7 +214,7 @@ namespace LabPay.ModelView
             }
         }
 
-        private SettingBrokerPage page;
+        private SettingServerPage page;
 
         #region イベント設定
         public event PropertyChangedEventHandler PropertyChanged;
