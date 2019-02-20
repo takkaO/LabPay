@@ -125,17 +125,25 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelView\Configuration.cs" />
-    <Compile Include="ModelView\SettingServer.cs" />
+    <Compile Include="ModelView\ProductSetting.cs" />
+    <Compile Include="ModelView\ServerSetting.cs" />
     <Compile Include="ModelView\MainMenu.cs" />
+    <Compile Include="ModelView\UserSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ConfigurationPage.xaml.cs">
       <DependentUpon>ConfigurationPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ProductSettingPage.xaml.cs">
+      <DependentUpon>ProductSettingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectProductsPage.xaml.cs">
       <DependentUpon>SelectProductsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingServerPage.xaml.cs">
-      <DependentUpon>SettingServerPage.xaml</DependentUpon>
+    <Compile Include="View\ServerSettingPage.xaml.cs">
+      <DependentUpon>ServerSettingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserSettingPage.xaml.cs">
+      <DependentUpon>UserSettingPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -169,11 +177,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ProductSettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SelectProductsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SettingServerPage.xaml">
+    <Page Include="View\ServerSettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserSettingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

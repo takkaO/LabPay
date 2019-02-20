@@ -3,7 +3,6 @@ using LabPay.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,47 +10,21 @@ using System.Windows.Input;
 
 namespace LabPay.ModelView
 {
-    class Configuration : INotifyPropertyChanged
+    class UserSetting : INotifyPropertyChanged
     {
-
         public ICommand BackToBeforePageClicked { get; set; }
-        public ICommand ServerSettingClicked { get; set; }
-        public ICommand UserSettingClicked { get; set; }
-        public ICommand ProductSettingClicked { get; set; }
 
-        
-        private ConfigurationPage page;
-        public Configuration(ConfigurationPage mainPage)
+        private UserSettingPage page;
+        public UserSetting(UserSettingPage mainPage)
         {
             page = mainPage;
             BackToBeforePageClicked = new RelayCommand(BackToBeforePage);
-            ServerSettingClicked = new RelayCommand(MoveServerSettingPage);
-            UserSettingClicked = new RelayCommand(MoveUserSettingPage);
-            ProductSettingClicked = new RelayCommand(MoveProductSettingPage);
         }
 
         private void BackToBeforePage()
         {
             var parentPage = PageStack.Pop();
             page.Frame.Navigate(parentPage, PageStack);
-        }
-
-        private void MoveProductSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(ProductSettingPage), PageStack);
-        }
-
-        private void MoveUserSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(UserSettingPage), PageStack);
-        }
-
-        private void MoveServerSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
         }
 
         public bool BackToBeforePageEnabled

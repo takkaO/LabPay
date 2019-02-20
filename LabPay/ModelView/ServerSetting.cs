@@ -14,14 +14,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace LabPay.ModelView
 {
-    class SettingServer : INotifyPropertyChanged
+    class ServerSetting : INotifyPropertyChanged
     {
 
         public ICommand BackToBeforePageClicked { get; set; }
         public ICommand ConnectTestClicked { get; set; }
 
-
-        public SettingServer(SettingServerPage mainPage)
+        private ServerSettingPage page;
+        public ServerSetting(ServerSettingPage mainPage)
         {
             page = mainPage;
             BackToBeforePageClicked = new RelayCommand(BackToBeforePage, CanGoBack);
@@ -213,8 +213,6 @@ namespace LabPay.ModelView
                 NotifyPropertyChanged("Port");
             }
         }
-
-        private SettingServerPage page;
 
         #region イベント設定
         public event PropertyChangedEventHandler PropertyChanged;
