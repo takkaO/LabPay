@@ -17,22 +17,25 @@ namespace LabPay.ModelView
     class SettingBroker : INotifyPropertyChanged
     {
 
-        public ICommand BackToHomeClicked { get; set; }
+        public ICommand BackToBeforePageClicked { get; set; }
         public ICommand ConnectTestClicked { get; set; }
+
 
         public SettingBroker(SettingBrokerPage mainPage)
         {
             page = mainPage;
-            BackToHomeClicked = new RelayCommand(MoveMainMenuPage, CanGoBack);
+            BackToBeforePageClicked = new RelayCommand(BackToBeforePage, CanGoBack);
             ConnectTestClicked = new RelayCommand(ConnectTest, CanGoBack);
             ConnectTesting = false;
             IpAddress = "localhost";
             Port = "65500";
         }
 
-        private void MoveMainMenuPage()
+        private void BackToBeforePage()
         {
-            page.Frame.Navigate(typeof(MainPage));
+
+            var parentPage = PageStack.Pop();
+            page.Frame.Navigate(parentPage, PageStack);
         }
 
         private async void ConnectTest()
@@ -52,6 +55,7 @@ namespace LabPay.ModelView
                     CloseButtonText = "OK"
                 };
                 ContentDialogResult result = await invalidIpAddressDialog.ShowAsync();
+                ConnectTesting = false;
                 return;
             }
 
@@ -127,6 +131,20 @@ namespace LabPay.ModelView
             return true;
         }
 
+        private Stack<Type> pageStack = new Stack<Type>();
+        public Stack<Type> PageStack
+        {
+            get
+            {
+                return pageStack;
+            }
+            set
+            {
+                pageStack = value;
+                NotifyPropertyChanged("BackToBeforePageEnabled");
+            }
+        }
+
         private bool _connectTesting;
         public bool ConnectTesting
         {
@@ -137,7 +155,7 @@ namespace LabPay.ModelView
             set
             {
                 _connectTesting = value;
-                NotifyPropertyChanged("BackToHomeEnabled");
+                NotifyPropertyChanged("BackToBeforePageEnabled");
                 NotifyPropertyChanged("ConnectTestEnabled");
             }
         }
@@ -145,15 +163,16 @@ namespace LabPay.ModelView
 
         private bool CanGoBack()
         {
+            Debug.WriteLine(BackToBeforePageEnabled);
             return !ConnectTesting;
         } 
 
         
-        public bool BackToHomeEnabled
+        public bool BackToBeforePageEnabled
         {
             get
             {
-                return !ConnectTesting;
+                return (!ConnectTesting && PageStack.Count != 0);
             }
         }
 

@@ -11,6 +11,16 @@
 
     <Grid>
         <Button Command="{Binding SelectProductsClicked}" Content="Select Products" FontSize="50" HorizontalAlignment="Center" Margin="0,152,0,0" VerticalAlignment="Top" Height="135" Width="397"/>
+        <Button HorizontalAlignment="Left" 
+                Margin="728,408,0,0" 
+                VerticalAlignment="Top" 
+                Width="62"
+                Height="62"
+                Command="{Binding SettingClicked}">
+            <StackPanel>
+                <Image Source="Assets/Gear.png"/>
+            </StackPanel>
+        </Button>
 
     </Grid>
 </Page>

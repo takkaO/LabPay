@@ -1,6 +1,7 @@
 ﻿using LabPay.ModelView;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,17 +25,34 @@ namespace LabPay
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private MainMenu p;
         public MainPage()
         {
             this.InitializeComponent();
+            
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
 
             // x86/x64でもリモート環境と同じWindowサイズで起動する
             ApplicationView.PreferredLaunchViewSize = new Size { Width = 800, Height = 480 };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
+            p = new MainMenu(this);
+            DataContext = p;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //Debug.WriteLine(e.Parameter.GetType());
+            /*
+            if (e.Parameter != null)
+            {
+                var pages = (Stack<Type>)e.Parameter;
+                p.PageStack = pages;
+            }
+            */
             
 
-            DataContext = new MainMenu(this);
+            base.OnNavigatedTo(e);
         }
     }
 }

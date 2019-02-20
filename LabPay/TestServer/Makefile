@@ -4,6 +4,10 @@ sqlite: sqlite.c
 server: server.c
 	gcc server.c -o server
 
+test: test.c
+	gcc test.c -o test -lcrypt
+
 all: sqlite.c server.c
 	gcc sqlite.c -o sqlite -lsqlite3
 	gcc server.c -o server
+	gcc test.c -o test -lcrypt
