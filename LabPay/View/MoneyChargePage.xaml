@@ -10,6 +10,8 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <TextBlock FontSize="40" HorizontalAlignment="Center" Margin="0,10,0,0" Text="Money Charge" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"/>
+
         <Button Command="{Binding BackToBeforePageClicked}" 
                 IsEnabled="{Binding BackToBeforePageEnabled}"
                 Content="Back" 
@@ -19,5 +21,24 @@
                 VerticalAlignment="Top" 
                 Height="59"
                 Width="142"/>
+        <Button Command="{Binding Charge500YenClicked}"
+                FontSize="30" 
+                Content="\500" 
+                HorizontalAlignment="Left" 
+                Margin="247,0,0,0" 
+                VerticalAlignment="Center" 
+                Height="140" 
+                Width="140"
+                FontWeight="Bold"/>
+        <Button Command="{Binding Charge1000YenClicked}"
+                FontSize="30" 
+                Content="\1000" 
+                HorizontalAlignment="Left" 
+                Margin="415,0,0,0" 
+                VerticalAlignment="Center" 
+                Height="140" 
+                Width="140"
+                FontWeight="Bold"/>
+
     </Grid>
 </Page>

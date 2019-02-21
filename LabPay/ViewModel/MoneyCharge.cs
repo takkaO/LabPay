@@ -3,55 +3,55 @@ using LabPay.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LabPay.ModelView
+namespace LabPay.ViewModel
 {
-    class Configuration : INotifyPropertyChanged
+    class MoneyCharge : INotifyPropertyChanged
     {
-
         public ICommand BackToBeforePageClicked { get; set; }
-        public ICommand ServerSettingClicked { get; set; }
-        public ICommand UserSettingClicked { get; set; }
-        public ICommand ProductSettingClicked { get; set; }
+        public ICommand Charge500YenClicked { get; set; }
+        public ICommand Charge1000YenClicked { get; set; }
 
-        
-        private ConfigurationPage page;
-        public Configuration(ConfigurationPage mainPage)
+        private MoneyChargePage page;
+        public MoneyCharge(MoneyChargePage mainPage)
         {
             page = mainPage;
             BackToBeforePageClicked = new RelayCommand(BackToBeforePage);
-            ServerSettingClicked = new RelayCommand(MoveServerSettingPage);
-            UserSettingClicked = new RelayCommand(MoveUserSettingPage);
-            ProductSettingClicked = new RelayCommand(MoveProductSettingPage);
+            Charge500YenClicked = new RelayCommand(Charge500Yen);
+            Charge1000YenClicked = new RelayCommand(Charge1000Yen);
+            CheckServerSettingFile();
+        }
+
+        private void Charge500Yen()
+        {
+
+        }
+
+        private void Charge1000Yen()
+        {
+
+        }
+
+        private async void CheckServerSettingFile()
+        {
+            (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
+            if (res == false)
+            {
+                await CustomDialog.ServerSettingLoadError();
+                PageStack.Push(page.GetType());
+                page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
+                return;
+            }
         }
 
         private void BackToBeforePage()
         {
             var parentPage = PageStack.Pop();
             page.Frame.Navigate(parentPage, PageStack);
-        }
-
-        private void MoveProductSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(ProductSettingPage), PageStack);
-        }
-
-        private void MoveUserSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(UserSettingPage), PageStack);
-        }
-
-        private void MoveServerSettingPage()
-        {
-            PageStack.Push(page.GetType());
-            page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
         }
 
         public bool BackToBeforePageEnabled

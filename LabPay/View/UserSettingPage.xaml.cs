@@ -1,4 +1,4 @@
-﻿using LabPay.ModelView;
+﻿using LabPay.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

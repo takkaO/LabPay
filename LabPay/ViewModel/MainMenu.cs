@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LabPay.Common;
 using LabPay.View;
-using LabPay.ModelView;
+using LabPay.ViewModel;
 
 
-namespace LabPay.ModelView
+namespace LabPay.ViewModel
 {
     class MainMenu : INotifyPropertyChanged
     {

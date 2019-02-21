@@ -126,12 +126,12 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ModelView\Configuration.cs" />
-    <Compile Include="ModelView\MoneyCharge.cs" />
-    <Compile Include="ModelView\ProductSetting.cs" />
-    <Compile Include="ModelView\ServerSetting.cs" />
-    <Compile Include="ModelView\MainMenu.cs" />
-    <Compile Include="ModelView\UserSetting.cs" />
+    <Compile Include="ViewModel\Configuration.cs" />
+    <Compile Include="ViewModel\MoneyCharge.cs" />
+    <Compile Include="ViewModel\ProductSetting.cs" />
+    <Compile Include="ViewModel\ServerSetting.cs" />
+    <Compile Include="ViewModel\MainMenu.cs" />
+    <Compile Include="ViewModel\UserSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ConfigurationPage.xaml.cs">
       <DependentUpon>ConfigurationPage.xaml</DependentUpon>

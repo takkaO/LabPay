@@ -13,7 +13,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace LabPay.ModelView
+namespace LabPay.ViewModel
 {
     class ServerSetting : INotifyPropertyChanged
     {

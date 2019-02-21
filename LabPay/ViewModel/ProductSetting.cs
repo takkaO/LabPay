@@ -8,14 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LabPay.ModelView
+namespace LabPay.ViewModel
 {
-    class MoneyCharge : INotifyPropertyChanged
+    class ProductSetting : INotifyPropertyChanged
     {
         public ICommand BackToBeforePageClicked { get; set; }
 
-        private MoneyChargePage page;
-        public MoneyCharge(MoneyChargePage mainPage)
+        private ProductSettingPage page;
+        public ProductSetting(ProductSettingPage mainPage)
         {
             page = mainPage;
             BackToBeforePageClicked = new RelayCommand(BackToBeforePage);

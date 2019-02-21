@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LabPay.Common
@@ -34,7 +35,7 @@ namespace LabPay.Common
         {
             StatOK,             // ステータスOK
             StatRequestHash,
-            StatRequestUserId,
+            StatRequestEmail,
             StatFIN,            // ステータス通信終了
             StatUnknown
         }
@@ -47,7 +48,7 @@ namespace LabPay.Common
         }
 
         public string GetTcpCommand(TcpCommandNumber num)
-        {           
+        {
             return Enum.GetName(typeof(TcpCommandNumber), num);
         }
 
@@ -59,8 +60,8 @@ namespace LabPay.Common
                     return TcpStatus.StatFIN;
                 case "HASH":
                     return TcpStatus.StatRequestHash;
-                case "UID":
-                    return TcpStatus.StatRequestUserId;
+                case "EMAIL":
+                    return TcpStatus.StatRequestEmail;
                 default:
                     return TcpStatus.StatUnknown;
             }
@@ -130,6 +131,7 @@ namespace LabPay.Common
         public bool SendMessage(string message, string end = "\n")
         {
             bool result = true;
+            ns.WriteTimeout = 5000;
             try
             {
                 Encoding enc = Encoding.UTF8;
@@ -146,6 +148,7 @@ namespace LabPay.Common
         public async Task<bool> SendMessageAsync(string message, string end = "\n")
         {
             bool result = true;
+
             try
             {
                 Encoding enc = Encoding.UTF8;
@@ -162,6 +165,7 @@ namespace LabPay.Common
         public string ReceiveMessage()
         {
             string resMsg = "";
+            ns.ReadTimeout = 5000;
             try
             {
                 Encoding enc = Encoding.UTF8;
@@ -190,22 +194,37 @@ namespace LabPay.Common
 
         public async Task<string> ReceiveMessageAsync()
         {
-            Encoding enc = Encoding.UTF8;
-            MemoryStream ms = new MemoryStream();
-            byte[] resBytes = new byte[256];
-            int resSize = 0;
-            do
+            string resMsg = "";
+
+            try
             {
-                resSize = await ns.ReadAsync(resBytes, 0, resBytes.Length);
-                if (resSize == 0)
+                using (var cancellationTokenSource = new CancellationTokenSource(5000))
                 {
-                    break;
+                    using (cancellationTokenSource.Token.Register(() => ns.Close()))
+                    {
+                        Encoding enc = Encoding.UTF8;
+                        MemoryStream ms = new MemoryStream();
+                        byte[] resBytes = new byte[256];
+                        int resSize = 0;
+                        do
+                        {
+                            resSize = await ns.ReadAsync(resBytes, 0, resBytes.Length);
+                            if (resSize == 0)
+                            {
+                                break;
+                            }
+                            ms.Write(resBytes, 0, resSize);
+                        } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
+                        resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+                        resMsg = resMsg.TrimEnd('\n');
+                        ms.Close();
+                    }
                 }
-                ms.Write(resBytes, 0, resSize);
-            } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
-            var resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
-            resMsg = resMsg.TrimEnd('\n');
-            ms.Close();
+            }
+            catch
+            {
+                resMsg = "";
+            }
             return resMsg;
         }
 

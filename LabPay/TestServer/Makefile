@@ -1,8 +1,8 @@
 sqlite: sqlite.c
 	gcc sqlite.c -o sqlite -lsqlite3
 
-server: server.c
-	gcc server.c -o server
+server: server.c hoge.c
+	gcc server.c hoge.c -o server
 
 test: test.c
 	gcc test.c -o test -lcrypt

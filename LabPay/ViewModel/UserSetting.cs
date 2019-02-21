@@ -11,7 +11,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace LabPay.ModelView
+namespace LabPay.ViewModel
 {
     class UserSetting : INotifyPropertyChanged
     {
@@ -73,14 +73,13 @@ namespace LabPay.ModelView
             do
             {
                 var resMsg = await tcp.ReceiveMessageAsync();
-                Debug.WriteLine(resMsg);
                 comStat = tcp.GetStatus(resMsg);
                 switch (comStat){
                     case Communication.TcpStatus.StatRequestHash:
                         await tcp.SendMessageAsync(hash);
                         break;
-                    case Communication.TcpStatus.StatRequestUserId:
-                        await tcp.SendMessageAsync(StudentNumber);
+                    case Communication.TcpStatus.StatRequestEmail:
+                        await tcp.SendMessageAsync(Email);
                         break;
                     case Communication.TcpStatus.StatFIN:
                         break;
@@ -93,6 +92,8 @@ namespace LabPay.ModelView
             } while (comStat != Communication.TcpStatus.StatFIN);
 
             ResultVisibility = Visibility.Visible;
+            passwordBox.Password = "";
+            Email = "";
             await CustomDialog.UserRegisterComplete();
             tcp.Disconnect();
             Registering = false;
@@ -160,17 +161,17 @@ namespace LabPay.ModelView
             }
         }
 
-        private string _studentNumber;
-        public string StudentNumber
+        private string _Email;
+        public string Email
         {
             get
             {
-                return _studentNumber;
+                return _Email;
             }
             set
             {
-                _studentNumber = value.ToLower();
-                NotifyPropertyChanged("StudentNumber");
+                _Email = value.ToLower();
+                NotifyPropertyChanged("Email");
             }
         }
 

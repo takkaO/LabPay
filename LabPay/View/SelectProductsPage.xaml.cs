@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using LabPay.ModelView;
+using LabPay.ViewModel;
 
 // 空白ページの項目テンプレートについては、https://go.microsoft.com/fwlink/?LinkId=234238 を参照してください
 
@@ -31,8 +31,6 @@ namespace LabPay.View
             // x86/x64でもリモート環境と同じWindowサイズで起動する
             ApplicationView.PreferredLaunchViewSize = new Size { Width = 800, Height = 480 };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-
-            
         }
     }
 }
