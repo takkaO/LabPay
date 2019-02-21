@@ -119,12 +119,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\CalcHash.cs" />
     <Compile Include="Common\CustomIO.cs" />
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\Communication.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelView\Configuration.cs" />
+    <Compile Include="ModelView\MoneyCharge.cs" />
     <Compile Include="ModelView\ProductSetting.cs" />
     <Compile Include="ModelView\ServerSetting.cs" />
     <Compile Include="ModelView\MainMenu.cs" />
@@ -132,6 +135,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ConfigurationPage.xaml.cs">
       <DependentUpon>ConfigurationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoneyChargePage.xaml.cs">
+      <DependentUpon>MoneyChargePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProductSettingPage.xaml.cs">
       <DependentUpon>ProductSettingPage.xaml</DependentUpon>
@@ -153,7 +159,9 @@
     <None Include="LabPay_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\DustBox.png" />
     <Content Include="Assets\Gear.png" />
+    <Content Include="Assets\Money.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -174,6 +182,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ConfigurationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MoneyChargePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

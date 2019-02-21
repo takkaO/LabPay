@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace LabPay.Common
 {
-    class RelayCommand : ICommand
+    public class RelayCommand : ICommand
     {
         private readonly Action _execute;
         private readonly Func<bool> _canExecute;
@@ -36,6 +36,47 @@ namespace LabPay.Common
         public void Execute(object parameter)
         {
             _execute();
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            var handler = CanExecuteChanged;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+    }
+
+    public class RelayCommandWithParameter<T> : ICommand
+    {
+        private readonly Action<T> _execute;
+        private readonly Func<bool> _canExecute;
+
+        public event EventHandler CanExecuteChanged;
+
+        public RelayCommandWithParameter(Action<T> execute) : this(execute, null)
+        {
+
+        }
+        public RelayCommandWithParameter(Action<T> execute, Func<bool> canExecute)
+        {
+            if (execute == null)
+            {
+                throw new ArgumentNullException("execute");
+            }
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null ? true : _canExecute();
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T)parameter);
         }
 
         public void RaiseCanExecuteChanged()

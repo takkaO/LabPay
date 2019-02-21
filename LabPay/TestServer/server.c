@@ -27,11 +27,7 @@ int main(){
 	}
 
 	snprintf(buf, 2048, 
-	"HTTP/1.0 200 OK\r\n"
-	"Content-Length: 20\r\n"
-	"Content-Type: text/html\r\n"
-	"\r\n"
-	"HELLO\r\n");
+	"Receive Test Message");
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(65500);
@@ -46,27 +42,48 @@ int main(){
 		perror("listen");
 		return 1;
 	}
-	printf("Ready\n");
+
 	while(1){
-		// クライアントの要求受付
+		printf("Ready\n");
 		len = sizeof(client);
 		sock = accept(sock0, (struct sockaddr *)&client, &len);
 		if (sock < 0){
 			perror("accept");
 			return 1;
 		}
-
+		// クライアントの要求受付
 		printf("accept connection from %s, port=%d\n", inet_ntoa(client.sin_addr), ntohs(client.sin_port));
 
-		memset(inbuf, 0, sizeof(inbuf));
-		recv(sock, inbuf, sizeof(inbuf), 0);
-		// 受信した情報をパースすべき
-		printf("%s\n", inbuf);
+		while(1){
+			memset(inbuf, 0, sizeof(inbuf));
+			recv(sock, inbuf, sizeof(inbuf), 0);
+			// 受信した情報をパースすべき
+			printf("%s\n", inbuf);
+			if (strcmp(inbuf, "CmdTest\n") == 0){
+				write(sock, "FIN\n", (int)strlen("FIN\n"));
+			}
+			else if (strcmp(inbuf, "CmdAddUser\n") == 0){
+				printf("cmd OK");
+				write(sock, "HASH\n", (int)strlen("HASH\n"));
+				memset(inbuf, 0, sizeof(inbuf));
+				recv(sock, inbuf, sizeof(inbuf), 0);
+				printf("%s", inbuf);
+				write(sock, "UID\n", (int)strlen("UID\n"));
+				memset(inbuf, 0, sizeof(inbuf));
+				recv(sock, inbuf, sizeof(inbuf), 0);
+				printf("%s", inbuf);
+				write(sock, "FIN\n", (int)strlen("FIN\n"));
+			}
+			else{
+				write(sock, "ERROR\n", (int)strlen("ERROR\n"));
+				close(sock);
+				break;
+			}
+		}
 
-		send(sock, buf, (int)strlen(buf), 0);
+		//send(sock, buf, (int)strlen(buf), 0);
 
 		// TCPセッションの終了
-		close(sock);
 	}
 
 	// サーバ終了

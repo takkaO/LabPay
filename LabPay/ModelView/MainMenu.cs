@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LabPay.Common;
 using LabPay.View;
+using LabPay.ModelView;
 
 
 namespace LabPay.ModelView
@@ -17,6 +18,7 @@ namespace LabPay.ModelView
         
         public ICommand SelectProductsClicked { get; set; }
         public ICommand SettingClicked { get; set; }
+        public ICommand MoneyChargeClicked { get; set; }
         public Stack<Type> PageStack { get; set; } = new Stack<Type>();
 
         public MainMenu(LabPay.MainPage mainPage)
@@ -25,21 +27,38 @@ namespace LabPay.ModelView
             //Debug.WriteLine("{0}, {1}", typeof(MainPage), page.GetType());
             SelectProductsClicked = new RelayCommand(MoveSelectProductsPage);
             SettingClicked = new RelayCommand(MoveSettingPage);
+            MoneyChargeClicked = new RelayCommand(MoveMoneyChargePage);
         }
 
         private void MoveSettingPage()
         {
             PageStack.Push(page.GetType());
-            Debug.WriteLine(PageStack.Count);
             page.Frame.Navigate(typeof(ConfigurationPage), PageStack);
+        }
+
+        private async void MoveMoneyChargePage()
+        {
+            (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
+            if (res == false)
+            {
+                await CustomDialog.ServerSettingLoadError();
+                PageStack.Push(page.GetType());
+                page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
+                return;
+            }
+            PageStack.Push(page.GetType());
+            page.Frame.Navigate(typeof(MoneyChargePage), PageStack);
         }
 
         private async void MoveSelectProductsPage()
         {
-            if(await CustomIO.ExistFile() == false)
+            (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
+            if (res == false)
             {
+                await CustomDialog.ServerSettingLoadError();
                 PageStack.Push(page.GetType());
                 page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
+                return;
             }
         }        
 

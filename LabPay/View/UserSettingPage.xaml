@@ -10,7 +10,14 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        
+        <TextBlock FontSize="40" HorizontalAlignment="Center" Margin="0,10,0,0" Text="User Setting" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock TextAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="109,118,0,0" Text="Student Number" TextWrapping="Wrap" VerticalAlignment="Top" Width="190"/>
+        <TextBox Text="{Binding StudentNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" FontSize="24" Margin="301,118,0,0" VerticalAlignment="Top" Width="381" Height="35"  Padding="10,0,6,0" PlaceholderText="t12a345b"/>
+        <TextBlock TextAlignment="Center" HorizontalAlignment="Left" FontSize="24" Margin="109,158,0,0" Text="Password" TextWrapping="Wrap" VerticalAlignment="Top" Width="190"/>
+        <PasswordBox Name="txtPassword" HorizontalAlignment="Left" Margin="301,158,0,0" VerticalAlignment="Top" Width="380"/>
+        <Button Command="{Binding RegisterClicked}" CommandParameter="{Binding ElementName=txtPassword}" IsEnabled="{Binding RegisterEnabled}" Content="Register" FontSize="24" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Height="59" Width="197"/>
+        <TextBlock Visibility="{Binding ResultVisibility}" FontSize="24" HorizontalAlignment="Center" Margin="0,329,0,0" Text="Register OK !" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FF079900"/>
+
         <Button Command="{Binding BackToBeforePageClicked}" 
                 IsEnabled="{Binding BackToBeforePageEnabled}"
                 Content="Back" 
@@ -20,5 +27,7 @@
                 VerticalAlignment="Top" 
                 Height="59"
                 Width="142"/>
+
+
     </Grid>
 </Page>

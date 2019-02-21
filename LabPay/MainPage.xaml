@@ -18,9 +18,18 @@
                 Height="62"
                 Command="{Binding SettingClicked}">
             <StackPanel>
-                <Image Source="Assets/Gear.png"/>
+                <Image Source="/Assets/Gear.png"/>
             </StackPanel>
         </Button>
-
+        <Button HorizontalAlignment="Left" 
+                Margin="10,408,0,0" 
+                VerticalAlignment="Top" 
+                Width="62"
+                Height="62"
+                Command="{Binding MoneyChargeClicked}">
+            <StackPanel>
+                <Image Source="/Assets/Money.png"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </Page>

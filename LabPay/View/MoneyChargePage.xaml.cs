@@ -1,7 +1,6 @@
 ﻿using LabPay.ModelView;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,10 +22,10 @@ namespace LabPay.View
     /// <summary>
     /// それ自体で使用できる空白ページまたはフレーム内に移動できる空白ページ。
     /// </summary>
-    public sealed partial class ConfigurationPage : Page
+    public sealed partial class MoneyChargePage : Page
     {
-        private Configuration p;
-        public ConfigurationPage()
+        private MoneyCharge p;
+        public MoneyChargePage()
         {
             this.InitializeComponent();
 
@@ -34,18 +33,15 @@ namespace LabPay.View
             ApplicationView.PreferredLaunchViewSize = new Size { Width = 800, Height = 480 };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
 
-            p = new Configuration(this);
+            p = new MoneyCharge(this);
             DataContext = p;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Debug.WriteLine("Load OK");
-            //Debug.WriteLine(p.ParentPage != null);
             var pages = (Stack<Type>)e.Parameter;
             p.PageStack = pages;
-            
-            //Debug.WriteLine(p.ParentPage != null);
+
             base.OnNavigatedTo(e);
         }
     }
