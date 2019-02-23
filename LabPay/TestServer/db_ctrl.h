@@ -5,6 +5,7 @@
 #include <sqlite3.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -26,8 +27,18 @@ struct UserInfo
 	int money;
 };
 
-enum DBError UpdateMoneyValue(struct UserInfo user);
-enum DBError GetMoneyValue(const char *hash, int *money);
+struct ProductInfo{
+	char name[255];
+	int amount;
+	int value;
+};
+
+void GetTimeString(char *s, int s_len);
+enum DBError InsertBuyHistory(struct UserInfo user, struct ProductInfo product);
+enum DBError GetUserEmail(const char *hash, char *email);
+enum DBError GetProductValue(const char *name, int *value);
+enum DBError UpdateUserMoneyValue(struct UserInfo user);
+enum DBError GetUserMoneyValue(const char *hash, int *money);
 enum DBError CheckHashConflict(const char *hash);
 enum DBError InsertUserInfo(struct UserInfo user);
 

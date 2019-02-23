@@ -14,13 +14,15 @@ enum CmdCommandNumber
 	CmdTest,	   // 接続テストコマンド番号
 	CmdAddUser,	// ユーザ追加コマンド番号
 	CmdAddProduct, // 商品追加コマンド番号
-	CmdBuy,		   // 購入コマンド番号
+	CmdBuyProduct, // 購入コマンド番号
 	CmdSendMail,   // メール送信コマンド番号
 	CmdRequestHash,
+	CmdClientFIN,
 	CmdChargeMoney,
 	CmdUnknown
 };
 
+void BuyProducts(int sock);
 void ChargeMoney(int sock);
 int ReceiveCommand(int sock, char *buf, unsigned long int buf_size);
 void RegisterUser(int sock);

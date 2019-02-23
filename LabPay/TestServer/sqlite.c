@@ -2,10 +2,13 @@
 #include <sqlite3.h>
 #include <stdlib.h>
 #include "db_ctrl.h"
+#include <time.h>
 
-int main(){
-	int money = 0;
-	GetMoneyValue("test_pw", &money);
+int main(){	
+	char p[255] = {0};
+	GetUserEmail("15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225", p);
+
+	printf("%s\n", p);
 }
 
 int main_test(){

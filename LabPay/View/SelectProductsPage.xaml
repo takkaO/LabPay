@@ -22,18 +22,18 @@
                             </Style>
                         </StackPanel.Resources>
                         <Image Source="/Assets/CupNoodle.png" Width="70" Margin="10, 0, 0, 0"/>
-                        <TextBlock Text="Cup Noodle" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <TextBlock Text="Cup Noodle (\100)" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
+                        <Button Command="{Binding IncleaseCupNoodleClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Plus.png"/>
                             </StackPanel>
                         </Button>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <Button Command="{Binding DecleaseCupNoodleClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Minus.png"/>
                             </StackPanel>
                         </Button>
-                        <TextBox Text="99" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
+                        <TextBox Text="{Binding CupNoodleNumber}" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
                     </StackPanel>
                     <!-- パネルここまで -->
 
@@ -45,18 +45,18 @@
                             </Style>
                         </StackPanel.Resources>
                         <Image Source="/Assets/Pasta.png" Width="70" Margin="10, 0, 0, 0"/>
-                        <TextBlock Text="Pasta" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <TextBlock Text="Pasta (\200)" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
+                        <Button Command="{Binding IncleasePastaClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Plus.png"/>
                             </StackPanel>
                         </Button>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <Button Command="{Binding DecleasePastaClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Minus.png"/>
                             </StackPanel>
                         </Button>
-                        <TextBox Text="99" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
+                        <TextBox Text="{Binding PastaNumber}" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
                     </StackPanel>
                     <!-- パネルここまで -->
 
@@ -68,18 +68,18 @@
                             </Style>
                         </StackPanel.Resources>
                         <Image Source="/Assets/Rice.png" Width="70" Margin="10, 0, 0, 0"/>
-                        <TextBlock Text="Rice" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <TextBlock Text="Rice (\100)" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
+                        <Button Command="{Binding IncleaseRiceClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Plus.png"/>
                             </StackPanel>
                         </Button>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <Button Command="{Binding DecleaseRiceClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Minus.png"/>
                             </StackPanel>
                         </Button>
-                        <TextBox Text="99" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
+                        <TextBox Text="{Binding RiceNumber}" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
                     </StackPanel>
                     <!-- パネルここまで -->
 
@@ -91,23 +91,33 @@
                             </Style>
                         </StackPanel.Resources>
                         <Image Source="/Assets/Curry.png" Width="70" Margin="10, 0, 0, 0"/>
-                        <TextBlock Text="Curry" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <TextBlock Text="Curry (\100)" FontSize="40" Width="400" VerticalAlignment="Center" Margin="20" Padding="10, 0, 10, 0" FontWeight="Bold"/>
+                        <Button Command="{Binding IncleaseCurryClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Plus.png"/>
                             </StackPanel>
                         </Button>
-                        <Button FontSize="30" Width="70" Height="70">
+                        <Button Command="{Binding DecleaseCurryClicked}" FontSize="30" Width="70" Height="70">
                             <StackPanel>
                                 <Image Source="/Assets/Minus.png"/>
                             </StackPanel>
                         </Button>
-                        <TextBox Text="99" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
+                        <TextBox Text="{Binding CurryNumber}" FontSize="40" Width="80" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" Margin="20, 0, 0, 0"/>
                     </StackPanel>
                     <!-- パネルここまで -->
                 </StackPanel>
             </Border>
         </ScrollViewer>
+
+        <Button Command="{Binding BuyProductsClicked}" 
+                IsEnabled="{Binding BuyProductsEnabled}"
+                Content="Buy" 
+                FontSize="24"
+                HorizontalAlignment="Left" 
+                Margin="648,411,0,0" 
+                VerticalAlignment="Top" 
+                Height="59"
+                Width="142"/>
 
         <Button Command="{Binding BackToBeforePageClicked}" 
                 IsEnabled="{Binding BackToBeforePageEnabled}"
@@ -118,5 +128,12 @@
                 VerticalAlignment="Top" 
                 Height="59"
                 Width="142"/>
+
+        <RelativePanel HorizontalAlignment="Center" Height="460" VerticalAlignment="Center" Width="780" Background="#FFE0E0E0" Visibility="{Binding PasswordInputPanelVisibility}">
+            <Button Command="{Binding PasswordSubmitClicked}" CommandParameter="{Binding ElementName=txtPassword}" IsEnabled="{Binding PasswordSubmitEnabled}" FontSize="24" Content="Submit" HorizontalAlignment="Left" Height="55" VerticalAlignment="Top" Width="187" Margin="296,267,0,0"/>
+            <PasswordBox Name="txtPassword" HorizontalAlignment="Left" Margin="155,194,0,0" VerticalAlignment="Top" Height="32" Width="471"/>
+            <TextBlock FontSize="24" TextAlignment="Center" HorizontalAlignment="Left" Height="37" Text="Type your password." TextWrapping="Wrap" VerticalAlignment="Top" Width="471" Margin="155,145,0,0"/>
+        </RelativePanel>
+        
     </Grid>
 </Page>

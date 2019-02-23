@@ -48,6 +48,10 @@ int main()
 				ChargeMoney(sock);
 				status = CommandParse;
 				break;
+			case CmdBuyProduct:
+				BuyProducts(sock);
+				status = CommandParse;
+				break;
 			default:
 				SendCommand(sock, "ERROR");
 				status = Ready;

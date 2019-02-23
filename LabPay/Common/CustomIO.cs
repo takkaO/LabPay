@@ -27,8 +27,7 @@ namespace LabPay.Common
             {
                 Title = "Can't find server setting file.",
                 Content = "Please server setting first.",
-                //CloseButtonText = "OK"
-                PrimaryButtonText = "OK"
+                CloseButtonText = "OK"
             };
             return await dialog.ShowAsync();
         }
@@ -128,6 +127,40 @@ namespace LabPay.Common
             {
                 Title = "Charge Complete.",
                 Content = "Enjoy shopping! :)",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> AskBuyProducts(string money)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Confirmation.",
+                Content = "Would you buy products?\n" + "Total fee: " + money + " yen",
+                PrimaryButtonText = "Yse",
+                SecondaryButtonText = "No"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> PurchaseComplete()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Purchase complete.",
+                Content = "Thank you!",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> NoEnoughMoney()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "No enough money.",
+                Content = "Please deposit first.",
                 CloseButtonText = "OK"
             };
             return await dialog.ShowAsync();

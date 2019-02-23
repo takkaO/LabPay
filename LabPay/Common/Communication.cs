@@ -24,10 +24,12 @@ namespace LabPay.Common
             CmdTest,            // 接続テストコマンド番号
             CmdAddUser,         // ユーザ追加コマンド番号
             CmdAddProduct,      // 商品追加コマンド番号
-            CmdBuy,             // 購入コマンド番号
+            CmdBuyProduct,      // 購入コマンド番号
             CmdSendMail,        // メール送信コマンド番号
             CmdChargeMoney,
             CmdRequestHash,
+            CmdRequestBuyProduct,
+            CmdClientFIN,       // クライアント側の送信終了メッセージ
             CmdUnknown
         }
 
@@ -40,6 +42,9 @@ namespace LabPay.Common
             StatNoUser,
             StatFIN,            // ステータス通信終了
             StatHashConflict,
+            StatRequestBuyProductName,
+            StatRequestBuyProductAmount,
+            StatNoEnoughMoney,
             StatError,
             StatUnknown
         }
@@ -72,6 +77,12 @@ namespace LabPay.Common
                     return TcpStatus.StatRequestAmountOfMoney;
                 case "NO_USER":
                     return TcpStatus.StatNoUser;
+                case "BUY_PRODUCT_NAME":
+                    return TcpStatus.StatRequestBuyProductName;
+                case "BUY_PRODUCT_AMOUNT":
+                    return TcpStatus.StatRequestBuyProductAmount;
+                case "NO_ENOUGH_MONEY":
+                    return TcpStatus.StatNoEnoughMoney;
                 case "ERROR":
                     return TcpStatus.StatError;
                 default:

@@ -1,9 +1,113 @@
 #include "server.h"
 
-void ChargeMoney(int sock){
+#define MAX_PRODUCT_NUM 4
+
+void BuyProducts(int sock)
+{
 	char inbuf[2048];
 	struct UserInfo user;
 	enum DBError ret;
+	int sync = FALSE;
+	int i, k;
+	int total_fee = 0;
+	struct ProductInfo products[MAX_PRODUCT_NUM];
+
+	SendCommand(sock, "HASH");
+	memset(inbuf, 0, sizeof(inbuf));
+	memset(user.hash, 0, sizeof(user.hash));
+	if (ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE)
+	{
+		return;
+	}
+	memcpy(user.hash, inbuf, sizeof(user.hash));
+
+	if (CheckHashConflict(user.hash) != DB_HASH_CONFLICT)
+	{
+		SendCommand(sock, "NO_USER");
+		return;
+	}
+
+	for (i = 0; i < MAX_PRODUCT_NUM; i++)
+	{
+		SendCommand(sock, "BUY_PRODUCT_NAME");
+		memset(inbuf, 0, sizeof(inbuf));
+		if (ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE)
+		{
+			SendCommand(sock, "ERROR");
+			return;
+		}
+		if (ParseCommand(inbuf) == CmdClientFIN)
+		{
+			break;
+		}
+		memcpy(products[i].name, inbuf, sizeof(products[i].name));
+
+		SendCommand(sock, "BUY_PRODUCT_AMOUNT");
+		memset(inbuf, 0, sizeof(inbuf));
+		if (ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE)
+		{
+			SendCommand(sock, "ERROR");
+			return;
+		}
+		sync = TRUE;
+		if (ParseCommand(inbuf) == CmdClientFIN)
+		{
+			break;
+		}
+		products[i].amount = atoi(inbuf);
+		sync = FALSE;
+	}
+
+	if(sync == FALSE){
+		// まだ残っているか聞く（商品最大数より多ければおかしい）
+		memset(inbuf, 0, sizeof(inbuf));
+		if (ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE)
+		{
+			SendCommand(sock, "ERROR");
+			return;
+		}
+		if (ParseCommand(inbuf) != CmdClientFIN)
+		{
+			SendCommand(sock, "ERROR");
+			return;
+		}
+	}
+
+	for(k = 0; k<i; k++){
+		products[k].value = 0;
+		GetProductValue(products[k].name, &products[k].value);
+		total_fee = total_fee + products[k].value * products[k].amount;
+	}
+
+	if(GetUserMoneyValue(user.hash, &user.money) != DB_NO_ERROR){
+		SendCommand(sock, "ERROR");
+		return;
+	}
+
+	if(user.money < total_fee){
+		SendCommand(sock, "NO_ENOUGH_MONEY");
+		return;
+	}
+
+	user.money = user.money - total_fee;
+	if(UpdateUserMoneyValue(user) != DB_NO_ERROR){
+		SendCommand(sock, "ERROR");
+		return;
+	}
+	SendCommand(sock, "FIN");
+
+	GetUserEmail(user.hash, user.email);
+	for(k = 0; k<i; k++){
+		InsertBuyHistory(user, products[k]);
+	}
+}
+
+void ChargeMoney(int sock)
+{
+	char inbuf[2048];
+	struct UserInfo user;
+	enum DBError ret;
+	int money = 0;
 
 	SendCommand(sock, "HASH");
 	memset(inbuf, 0, sizeof(inbuf));
@@ -22,20 +126,30 @@ void ChargeMoney(int sock){
 	}
 	user.money = atoi(inbuf);
 
-	if(CheckHashConflict(user.hash) != DB_HASH_CONFLICT){
+	if (CheckHashConflict(user.hash) != DB_HASH_CONFLICT)
+	{
 		SendCommand(sock, "NO_USER");
 		return;
 	}
 
-	if (UpdateMoneyValue(user) == DB_NO_ERROR){
+	if( GetUserMoneyValue(user.hash, &money) != DB_NO_ERROR){
+		SendCommand(sock, "NO_USER");
+		return;
+	}
+
+	user.money += money;
+	if (UpdateUserMoneyValue(user) == DB_NO_ERROR)
+	{
 		SendCommand(sock, "FIN");
 	}
-	else{
+	else
+	{
 		SendCommand(sock, "ERROR");
 	}
 }
 
-void RegisterUser(int sock){
+void RegisterUser(int sock)
+{
 	char inbuf[2048];
 	struct UserInfo user;
 	enum DBError ret;
@@ -43,7 +157,8 @@ void RegisterUser(int sock){
 	SendCommand(sock, "HASH");
 	memset(inbuf, 0, sizeof(inbuf));
 	memset(user.hash, 0, sizeof(user.hash));
-	if(ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE){
+	if (ReceiveCommand(sock, inbuf, sizeof(inbuf)) == FALSE)
+	{
 		return;
 	}
 	memcpy(user.hash, inbuf, sizeof(user.hash));
@@ -59,17 +174,21 @@ void RegisterUser(int sock){
 	user.money = 0;
 
 	ret = CheckHashConflict(user.hash);
-	if(ret != DB_NO_ERROR){
-		if(ret == DB_HASH_CONFLICT){
+	if (ret != DB_NO_ERROR)
+	{
+		if (ret == DB_HASH_CONFLICT)
+		{
 			SendCommand(sock, "HASH_CONFLICT");
 		}
-		else{
+		else
+		{
 			SendCommand(sock, "ERROR");
 		}
 		return;
 	}
 
-	if(InsertUserInfo(user) == DB_NO_ERROR){
+	if (InsertUserInfo(user) == DB_NO_ERROR)
+	{
 		SendCommand(sock, "FIN");
 	}
 	else
@@ -78,23 +197,35 @@ void RegisterUser(int sock){
 	}
 }
 
-void TestConnection(int sock){
+void TestConnection(int sock)
+{
 	SendCommand(sock, "FIN");
 }
 
 enum CmdCommandNumber ParseCommand(const char *buf)
 {
-	if(strcmp(buf, "CmdTest") == 0){
+	if (strcmp(buf, "CmdTest") == 0)
+	{
 		return CmdTest;
 	}
 	else if (strcmp(buf, "CmdAddUser") == 0)
 	{
 		return CmdAddUser;
 	}
-	else if(strcmp(buf, "CmdChargeMoney") == 0){
+	else if (strcmp(buf, "CmdChargeMoney") == 0)
+	{
 		return CmdChargeMoney;
 	}
-	else{
+	else if (strcmp(buf, "CmdBuyProduct") == 0)
+	{
+		return CmdBuyProduct;
+	}
+	else if (strcmp(buf, "CmdClientFIN") == 0)
+	{
+		return CmdClientFIN;
+	}
+	else
+	{
 		return CmdUnknown;
 	}
 }
@@ -119,7 +250,8 @@ int ReceiveCommand(int sock, char *buf, unsigned long int buf_size)
 	return TRUE;
 }
 
-void SendCommand(int sock, const char *cmd){
+void SendCommand(int sock, const char *cmd)
+{
 	char s[255] = {0};
 	snprintf(s, 255, "%s%s", cmd, "\n");
 	write(sock, s, (int)strlen(s));
