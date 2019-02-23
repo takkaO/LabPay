@@ -41,9 +41,52 @@ namespace LabPay.ViewModel
             }
         }
 
+        private enum CheckInputDataResult
+        {
+            PasswordTooShort,
+            EmailTooShort,
+            EmailTooLong,
+            NoError
+        }
+
+        private CheckInputDataResult CheckInputData(string email, string pass)
+        {
+            const int MIN_PASSWORD_LENGTH = 6;
+            const int MIN_EMAIL_LENGTH = 10;
+            const int MAX_EMAIL_LENGTH = 254;   // ヌル文字分-1
+            if (pass.Length < MIN_PASSWORD_LENGTH)
+            {
+                return CheckInputDataResult.PasswordTooShort;
+            }
+            if (email.Length < MIN_EMAIL_LENGTH)
+            {
+                return CheckInputDataResult.EmailTooShort;
+            }
+            if (email.Length > MAX_EMAIL_LENGTH)
+            {
+                return CheckInputDataResult.EmailTooLong;
+            }
+            return CheckInputDataResult.NoError;
+        }
+
         private async void Register(object parameter)
         {
             Registering = true;
+            ResultVisibility = Visibility.Collapsed;
+            var passwordBox = parameter as PasswordBox;
+            switch (CheckInputData(Email, passwordBox.Password))
+            {
+                case CheckInputDataResult.PasswordTooShort:
+                    await CustomDialog.UserRegisterPasswordLengthError();
+                    Registering = false;
+                    return;
+                case CheckInputDataResult.EmailTooShort:
+                case CheckInputDataResult.EmailTooLong:
+                    await CustomDialog.UserRegisterEmailLengthError();
+                    Registering = false;
+                    return;
+            }
+
             (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
             if (res == false)
             {
@@ -65,9 +108,7 @@ namespace LabPay.ViewModel
                 return;
             }
 
-            var passwordBox = parameter as PasswordBox;
             var hash = CalcHash.Sha256(passwordBox.Password);
-
             await tcp.SendMessageAsync(tcp.GetTcpCommand(Communication.TcpCommandNumber.CmdAddUser));
             Communication.TcpStatus comStat;
             do
@@ -83,6 +124,11 @@ namespace LabPay.ViewModel
                         break;
                     case Communication.TcpStatus.StatFIN:
                         break;
+                    case Communication.TcpStatus.StatHashConflict:
+                        await CustomDialog.UserRegisterHashConflictError();
+                        tcp.Disconnect();
+                        Registering = false;
+                        return;
                     default:
                         await CustomDialog.UnknownError();
                         tcp.Disconnect();
@@ -97,11 +143,6 @@ namespace LabPay.ViewModel
             await CustomDialog.UserRegisterComplete();
             tcp.Disconnect();
             Registering = false;
-        }
-
-        private void CheckServerConnection()
-        {
-
         }
 
         private void BackToBeforePage()

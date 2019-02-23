@@ -129,6 +129,7 @@
     <Compile Include="ViewModel\Configuration.cs" />
     <Compile Include="ViewModel\MoneyCharge.cs" />
     <Compile Include="ViewModel\ProductSetting.cs" />
+    <Compile Include="ViewModel\SelectProducts.cs" />
     <Compile Include="ViewModel\ServerSetting.cs" />
     <Compile Include="ViewModel\MainMenu.cs" />
     <Compile Include="ViewModel\UserSetting.cs" />
@@ -159,9 +160,15 @@
     <None Include="LabPay_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\CupNoodle.png" />
+    <Content Include="Assets\Curry.png" />
     <Content Include="Assets\DustBox.png" />
     <Content Include="Assets\Gear.png" />
+    <Content Include="Assets\Minus.png" />
     <Content Include="Assets\Money.png" />
+    <Content Include="Assets\Pasta.png" />
+    <Content Include="Assets\Plus.png" />
+    <Content Include="Assets\Rice.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

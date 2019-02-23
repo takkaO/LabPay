@@ -77,6 +77,61 @@ namespace LabPay.Common
             };
             return await dialog.ShowAsync();
         }
+
+        public static async Task<ContentDialogResult> UserRegisterPasswordLengthError()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Password too short.",
+                Content = "You need more than 6 characters.",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> UserRegisterEmailLengthError()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Invalid Email.",
+                Content = "Please check your email.",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> UserRegisterHashConflictError()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Invalid password.",
+                Content = "This password is already registered.",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> NoUserError()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Can't find your data.",
+                Content = "Please user register first.",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
+
+        public static async Task<ContentDialogResult> ChargeComplete()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Charge Complete.",
+                Content = "Enjoy shopping! :)",
+                CloseButtonText = "OK"
+            };
+            return await dialog.ShowAsync();
+        }
     }
 
     static class CustomIO

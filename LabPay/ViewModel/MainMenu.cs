@@ -60,6 +60,8 @@ namespace LabPay.ViewModel
                 page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
                 return;
             }
+            PageStack.Push(page.GetType());
+            page.Frame.Navigate(typeof(SelectProductsPage), PageStack);
         }        
 
         private LabPay.MainPage page;

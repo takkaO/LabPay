@@ -6,7 +6,6 @@
 !*/TestServer/*.c
 !*/TestServer/*.h
 !*/TestServer/Makefile
-!*/TestServer/*.sqlite3
 !*/TestServer/*.bak
 
 # User-specific files

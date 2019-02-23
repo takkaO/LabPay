@@ -27,6 +27,7 @@
                 Height="85"
                 Width="668"/>
         <Button Command="{Binding ProductSettingClicked}"
+                IsEnabled="False"
                 Content="Product Setting" 
                 FontSize="30" 
                 HorizontalAlignment="Center" 

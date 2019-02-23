@@ -39,6 +39,14 @@
                 Height="140" 
                 Width="140"
                 FontWeight="Bold"/>
+        <RelativePanel HorizontalAlignment="Center" Height="460" VerticalAlignment="Center" Width="780" Background="#FFE0E0E0" Visibility="{Binding PasswordInputPanelVisibility}">
+            <Button Command="{Binding PasswordSubmitClicked}" CommandParameter="{Binding ElementName=txtPassword}" IsEnabled="{Binding PasswordSubmitEnabled}" FontSize="24" Content="Submit" HorizontalAlignment="Left" Height="55" VerticalAlignment="Top" Width="187" Margin="296,267,0,0"/>
+            <PasswordBox Name="txtPassword" HorizontalAlignment="Left" Margin="155,194,0,0" VerticalAlignment="Top" Height="32" Width="471"/>
+            <TextBlock FontSize="24" TextAlignment="Center" HorizontalAlignment="Left" Height="37" Text="Type your password." TextWrapping="Wrap" VerticalAlignment="Top" Width="471" Margin="155,145,0,0"/>
+        </RelativePanel>
+
+
+
 
     </Grid>
 </Page>

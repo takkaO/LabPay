@@ -26,9 +26,9 @@ namespace LabPay.Common
             CmdAddProduct,      // 商品追加コマンド番号
             CmdBuy,             // 購入コマンド番号
             CmdSendMail,        // メール送信コマンド番号
+            CmdChargeMoney,
             CmdRequestHash,
-            CmdRequestUserId,
-            CmdRequest
+            CmdUnknown
         }
 
         public enum TcpStatus
@@ -36,7 +36,11 @@ namespace LabPay.Common
             StatOK,             // ステータスOK
             StatRequestHash,
             StatRequestEmail,
+            StatRequestAmountOfMoney,
+            StatNoUser,
             StatFIN,            // ステータス通信終了
+            StatHashConflict,
+            StatError,
             StatUnknown
         }
 
@@ -62,6 +66,14 @@ namespace LabPay.Common
                     return TcpStatus.StatRequestHash;
                 case "EMAIL":
                     return TcpStatus.StatRequestEmail;
+                case "HASH_CONFLICT":
+                    return TcpStatus.StatHashConflict;
+                case "AMOUNT_MONEY":
+                    return TcpStatus.StatRequestAmountOfMoney;
+                case "NO_USER":
+                    return TcpStatus.StatNoUser;
+                case "ERROR":
+                    return TcpStatus.StatError;
                 default:
                     return TcpStatus.StatUnknown;
             }

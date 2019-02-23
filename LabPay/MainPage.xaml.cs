@@ -42,16 +42,6 @@ namespace LabPay
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Debug.WriteLine(e.Parameter.GetType());
-            /*
-            if (e.Parameter != null)
-            {
-                var pages = (Stack<Type>)e.Parameter;
-                p.PageStack = pages;
-            }
-            */
-            
-
             base.OnNavigatedTo(e);
         }
     }

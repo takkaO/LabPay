@@ -24,6 +24,7 @@ namespace LabPay.View
     /// </summary>
     public sealed partial class SelectProductsPage : Page
     {
+        SelectProducts p;
         public SelectProductsPage()
         {
             this.InitializeComponent();
@@ -31,6 +32,17 @@ namespace LabPay.View
             // x86/x64でもリモート環境と同じWindowサイズで起動する
             ApplicationView.PreferredLaunchViewSize = new Size { Width = 800, Height = 480 };
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
+            p = new SelectProducts(this);
+            DataContext = p;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var pages = (Stack<Type>)e.Parameter;
+            p.PageStack = pages;
+
+            base.OnNavigatedTo(e);
         }
     }
 }
