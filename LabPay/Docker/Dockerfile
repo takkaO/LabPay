@@ -11,7 +11,22 @@ RUN apt upgrade -y
 WORKDIR /srv
 
 # Dockerfileのディレクトリの中身をイメージの中のWORKDIRにコピー
-COPY ../ .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/Makefile .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/server_main.c .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/server.c .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/server.h .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/db_ctrl.c .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/db_ctrl.h .
+ADD https://raw.githubusercontent.com/takkaO/LabPay/master/LabPay/Server/db_test.sqlite3.bak .
+
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/Makefile .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/server_main.c .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/server.c .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/server.h .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/db_ctrl.c .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/db_ctrl.h .
+#ADD https://raw.githubusercontent.com/takkaO/LabPay/develop/LabPay/Server/db_test.sqlite3.bak .
+RUN cp db_test.sqlite3.bak db_test.sqlite3
 
 EXPOSE 65500
 
@@ -21,4 +36,6 @@ RUN echo "Install sqlite"
 RUN apt install sqlite libsqlite3-dev -y
 RUN echo "Install screen"
 RUN apt install screen -y
+RUN echo "Build server"
+RUN make server
 RUN echo "Finish!"

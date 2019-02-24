@@ -1,0 +1,10 @@
+labmen:
+  image: labpay_server
+  container_name: "labpay_server"
+  tty: true
+  ports: 
+    - "65500:65500"
+  restart: always
+  command: "/bin/bash -c 'screen -dmS labpay_server ./server && /bin/bash'"
+  #command: "bash -c 'screen -S broker mosquitto'"
+  
