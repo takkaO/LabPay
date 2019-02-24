@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.System;
+using Windows.UI.Xaml.Controls;
 
 namespace LabPay.ViewModel
 {
@@ -18,6 +20,7 @@ namespace LabPay.ViewModel
         public ICommand ServerSettingClicked { get; set; }
         public ICommand UserSettingClicked { get; set; }
         public ICommand ProductSettingClicked { get; set; }
+        public ICommand PowerButtonClicked { get; set; }
 
         
         private ConfigurationPage page;
@@ -28,6 +31,26 @@ namespace LabPay.ViewModel
             ServerSettingClicked = new RelayCommand(MoveServerSettingPage);
             UserSettingClicked = new RelayCommand(MoveUserSettingPage);
             ProductSettingClicked = new RelayCommand(MoveProductSettingPage);
+            PowerButtonClicked = new RelayCommand(PowerConfiguration);
+        }
+
+        private async void PowerConfiguration()
+        {
+            var res = await CustomDialog.AskPowerOff();
+            if (res == ContentDialogResult.Primary)
+            {
+                //Debug.WriteLine("Shutdown");
+                ShutdownManager.BeginShutdown(ShutdownKind.Shutdown, TimeSpan.Zero);
+            }
+            else if (res == ContentDialogResult.Secondary)
+            {
+                //Debug.WriteLine("Reboot");
+                ShutdownManager.BeginShutdown(ShutdownKind.Restart, TimeSpan.Zero);
+            }
+            else
+            {
+                //Debug.WriteLine("Cancel");
+            }
         }
 
         private void BackToBeforePage()

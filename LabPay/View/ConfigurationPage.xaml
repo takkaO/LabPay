@@ -35,6 +35,16 @@
                 VerticalAlignment="Top"
                 Height="85"
                 Width="668"/>
+        <Button HorizontalAlignment="Left" 
+                Margin="728,408,0,0" 
+                VerticalAlignment="Top" 
+                Width="62"
+                Height="62"
+                Command="{Binding PowerButtonClicked}">
+            <StackPanel>
+                <Image Source="/Assets/Power.png"/>
+            </StackPanel>
+        </Button>
         <Button Command="{Binding BackToBeforePageClicked}" 
                 IsEnabled="{Binding BackToBeforePageEnabled}"
                 Content="Back" 

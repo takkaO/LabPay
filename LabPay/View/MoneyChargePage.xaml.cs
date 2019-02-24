@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -43,6 +44,14 @@ namespace LabPay.View
             p.PageStack = pages;
 
             base.OnNavigatedTo(e);
+        }
+
+        private void OnKeyDownHandler(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                InputPane.GetForCurrentView().TryHide();
+            }
         }
     }
 }

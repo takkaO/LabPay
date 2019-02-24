@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using LabPay.ViewModel;
+using Windows.System;
 
 // 空白ページの項目テンプレートについては、https://go.microsoft.com/fwlink/?LinkId=234238 を参照してください
 
@@ -43,6 +44,14 @@ namespace LabPay.View
             p.PageStack = pages;
 
             base.OnNavigatedTo(e);
+        }
+
+        private void OnKeyDownHandler(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                InputPane.GetForCurrentView().TryHide();
+            }
         }
     }
 }

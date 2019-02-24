@@ -7,6 +7,11 @@
 !*/TestServer/*.h
 !*/TestServer/Makefile
 !*/TestServer/*.bak
+*/Server/*
+!*/Server/*.c
+!*/Server/*.h
+!*/Server/Makefile
+!*/Server/*.bak
 
 # User-specific files
 *.suo

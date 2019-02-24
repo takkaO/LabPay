@@ -165,6 +165,19 @@ namespace LabPay.Common
             };
             return await dialog.ShowAsync();
         }
+
+        public static async Task<ContentDialogResult> AskPowerOff()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Select power configuration.",
+                Content = "Do you want power off?",
+                PrimaryButtonText = "Shutdown",
+                SecondaryButtonText = "Reboot",
+                CloseButtonText = "Cancel"
+            };
+            return await dialog.ShowAsync();
+        }
     }
 
     static class CustomIO
