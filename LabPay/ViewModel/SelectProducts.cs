@@ -53,10 +53,9 @@ namespace LabPay.ViewModel
             UpdateBuyButtonState();
         }
 
-        private async void PasswordSubmit(object parameter)
+        private async Task BeginBuyProducts(string hash)
         {
             Connecting = true;
-            var passwordBox = parameter as PasswordBox;
             (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
             if (res == false)
             {
@@ -64,7 +63,6 @@ namespace LabPay.ViewModel
                 await CustomDialog.ServerSettingLoadError();
                 PageStack.Push(page.GetType());
                 page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
-                passwordBox.Password = "";
                 Connecting = false;
                 PasswordInputPanelVisibility = Visibility.Collapsed;
                 return;
@@ -76,14 +74,12 @@ namespace LabPay.ViewModel
             {
                 await CustomDialog.ServerConnectError();
                 tcp.Disconnect();
-                passwordBox.Password = "";
                 Connecting = false;
                 PasswordInputPanelVisibility = Visibility.Collapsed;
                 return;
             }
 
-            var hash = CalcHash.Sha256(passwordBox.Password);
-
+            
             await tcp.SendMessageAsync(tcp.GetTcpCommand(Communication.TcpCommandNumber.CmdBuyProduct));
             Communication.TcpStatus comStat;
             var products = CreateStack();
@@ -111,7 +107,6 @@ namespace LabPay.ViewModel
                         {
                             await CustomDialog.UnknownError();
                             tcp.Disconnect();
-                            passwordBox.Password = "";
                             Connecting = false;
                             PasswordInputPanelVisibility = Visibility.Collapsed;
                         }
@@ -127,7 +122,6 @@ namespace LabPay.ViewModel
                     case Communication.TcpStatus.StatNoEnoughMoney:
                         await CustomDialog.NoEnoughMoney();
                         tcp.Disconnect();
-                        passwordBox.Password = "";
                         Connecting = false;
                         PasswordInputPanelVisibility = Visibility.Collapsed;
                         PageStack.Push(page.GetType());
@@ -136,26 +130,30 @@ namespace LabPay.ViewModel
                     case Communication.TcpStatus.StatNoUser:
                         await CustomDialog.NoUserError();
                         tcp.Disconnect();
-                        passwordBox.Password = "";
                         Connecting = false;
                         PasswordInputPanelVisibility = Visibility.Collapsed;
                         return;
                     default:
                         await CustomDialog.UnknownError();
                         tcp.Disconnect();
-                        passwordBox.Password = "";
                         Connecting = false;
                         PasswordInputPanelVisibility = Visibility.Collapsed;
                         return;
                 }
             } while (comStat != Communication.TcpStatus.StatFIN);
 
-
-            passwordBox.Password = "";
             Connecting = false;
             PasswordInputPanelVisibility = Visibility.Collapsed;
             await CustomDialog.PurchaseComplete();
             page.Frame.Navigate(typeof(MainPage));
+        }
+
+        private async void PasswordSubmit(object parameter)
+        {
+            var passwordBox = parameter as PasswordBox;
+            var hash = CalcHash.Sha256(passwordBox.Password);
+            passwordBox.Password = "";
+            await BeginBuyProducts(hash);
         }
 
         class ProductInfo

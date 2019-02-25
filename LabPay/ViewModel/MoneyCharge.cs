@@ -34,10 +34,9 @@ namespace LabPay.ViewModel
             CheckServerSettingFile();
         }
 
-        private async void PasswordSubmit(object parameter)
+        private async Task BeginChargeMoney(string hash)
         {
             Connecting = true;
-            var passwordBox = parameter as PasswordBox;
             (bool res, string ip, string port) = await CustomIO.GetIpAndPort();
             if (res == false)
             {
@@ -45,7 +44,6 @@ namespace LabPay.ViewModel
                 await CustomDialog.ServerSettingLoadError();
                 PageStack.Push(page.GetType());
                 page.Frame.Navigate(typeof(ServerSettingPage), PageStack);
-                passwordBox.Password = "";
                 amountOfCharge = 0;
                 Connecting = false;
                 PasswordInputPanelVisibility = Visibility.Collapsed;
@@ -58,14 +56,13 @@ namespace LabPay.ViewModel
             {
                 await CustomDialog.ServerConnectError();
                 tcp.Disconnect();
-                passwordBox.Password = "";
                 amountOfCharge = 0;
                 Connecting = false;
                 PasswordInputPanelVisibility = Visibility.Collapsed;
                 return;
             }
 
-            var hash = CalcHash.Sha256(passwordBox.Password);
+            
             await tcp.SendMessageAsync(tcp.GetTcpCommand(Communication.TcpCommandNumber.CmdChargeMoney));
             Communication.TcpStatus comStat;
             do
@@ -85,7 +82,6 @@ namespace LabPay.ViewModel
                     case Communication.TcpStatus.StatNoUser:
                         await CustomDialog.NoUserError();
                         tcp.Disconnect();
-                        passwordBox.Password = "";
                         amountOfCharge = 0;
                         Connecting = false;
                         PasswordInputPanelVisibility = Visibility.Collapsed;
@@ -93,7 +89,6 @@ namespace LabPay.ViewModel
                     default:
                         await CustomDialog.UnknownError();
                         tcp.Disconnect();
-                        passwordBox.Password = "";
                         amountOfCharge = 0;
                         Connecting = false;
                         PasswordInputPanelVisibility = Visibility.Collapsed;
@@ -101,11 +96,19 @@ namespace LabPay.ViewModel
                 }
             } while (comStat != Communication.TcpStatus.StatFIN);
 
-            passwordBox.Password = "";
+            
             amountOfCharge = 0;
             Connecting = false;
             PasswordInputPanelVisibility = Visibility.Collapsed;
             await CustomDialog.ChargeComplete();
+        }
+
+        private async void PasswordSubmit(object parameter)
+        {
+            var passwordBox = parameter as PasswordBox;
+            var hash = CalcHash.Sha256(passwordBox.Password);
+            passwordBox.Password = "";
+            await BeginChargeMoney(hash);
         }
 
         private void Charge500Yen()

@@ -7,7 +7,11 @@
 #include <arpa/inet.h>
 #include <fcntl.h>  // for open
 #include <unistd.h> // for close
+#include <stdlib.h>
 #include "db_ctrl.h"
+
+#define COMMAND_MAX_LENGTH 2048
+#define MESSAGE_MAX_LENGTH 1024
 
 enum CmdCommandNumber
 {
@@ -27,6 +31,7 @@ void ChargeMoney(int sock);
 int ReceiveCommand(int sock, char *buf, unsigned long int buf_size);
 void RegisterUser(int sock);
 void TestConnection(int sock);
+int SendEmail(const char *mail_addr, const char *subject, const char *message);
 enum CmdCommandNumber ParseCommand(const char *buf);
 void SendCommand(int sock, const char *cmd);
 int PrepareServer(int port);

@@ -73,10 +73,15 @@ void BuyProducts(int sock)
 		}
 	}
 
+	char p[MESSAGE_MAX_LENGTH] = {0};
+	char q[MESSAGE_MAX_LENGTH] = {0};
 	for(k = 0; k<i; k++){
 		products[k].value = 0;
 		GetProductValue(products[k].name, &products[k].value);
 		total_fee = total_fee + products[k].value * products[k].amount;
+
+		memcpy(q, p, sizeof(p));
+		snprintf(p, MESSAGE_MAX_LENGTH, "%s%s　%d個　計%d円\n", q, products[k].name, products[k].amount, products[k].value * products[k].amount);
 	}
 
 	if(GetUserMoneyValue(user.hash, &user.money) != DB_NO_ERROR){
@@ -95,6 +100,14 @@ void BuyProducts(int sock)
 		return;
 	}
 	SendCommand(sock, "FIN");
+	char buf[MESSAGE_MAX_LENGTH] = {0};
+		snprintf(buf, MESSAGE_MAX_LENGTH, 
+		"'商品の購入が完了しました．\n"
+		"購入した商品は以下の通りです．\n\n"
+		"%s"
+		"\nあなたの残高は，%d円です\n"
+		"楽しい Lab Life をお送りください．\n'", p, user.money);
+		SendEmail(user.email, "[LabPay]商品の購入が完了しました．", buf);
 
 	GetUserEmail(user.hash, user.email);
 	for(k = 0; k<i; k++){
@@ -141,6 +154,12 @@ void ChargeMoney(int sock)
 	if (UpdateUserMoneyValue(user) == DB_NO_ERROR)
 	{
 		SendCommand(sock, "FIN");
+		char buf[MESSAGE_MAX_LENGTH] = {0};
+		snprintf(buf, MESSAGE_MAX_LENGTH, 
+		"'あなたのアカウントへのチャージが完了しました．\n"
+		"現在の残高は%d円です．\n"
+		"楽しい Lab Life をお送りください．\n'", user.money);
+		SendEmail(user.email, "[LabPay]チャージが完了しました．", buf);
 	}
 	else
 	{
@@ -190,6 +209,11 @@ void RegisterUser(int sock)
 	if (InsertUserInfo(user) == DB_NO_ERROR)
 	{
 		SendCommand(sock, "FIN");
+		char buf[MESSAGE_MAX_LENGTH] = {0};
+		snprintf(buf, MESSAGE_MAX_LENGTH, 
+		"'LabPayへの登録が完了しました．\n"
+		"楽しい Lab Life をお送りください．\n'");
+		SendEmail(user.email, "ようそこLabPayへ", buf);
 	}
 	else
 	{
@@ -200,6 +224,20 @@ void RegisterUser(int sock)
 void TestConnection(int sock)
 {
 	SendCommand(sock, "FIN");
+}
+
+int SendEmail(const char *mail_addr, const char *subject, const char *message){
+	int result;
+	char buf[COMMAND_MAX_LENGTH] = {0};
+	snprintf(buf, COMMAND_MAX_LENGTH, "python3 send_gmail.py %s %s %s", mail_addr, subject, message);
+	result = system(buf);
+	//printf("%d %s\n", result, buf);
+	if(result == EXIT_SUCCESS){
+		return TRUE;
+	}
+	else{
+		return FALSE;
+	}
 }
 
 enum CmdCommandNumber ParseCommand(const char *buf)
