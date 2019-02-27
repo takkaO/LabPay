@@ -100,6 +100,7 @@ void BuyProducts(int sock)
 		return;
 	}
 	SendCommand(sock, "FIN");
+	GetUserEmail(user.hash, user.email);
 	char buf[MESSAGE_MAX_LENGTH] = {0};
 		snprintf(buf, MESSAGE_MAX_LENGTH, 
 		"'商品の購入が完了しました．\n"
@@ -108,8 +109,6 @@ void BuyProducts(int sock)
 		"\nあなたの残高は，%d円です\n"
 		"楽しい Lab Life をお送りください．\n'", p, user.money);
 		SendEmail(user.email, "[LabPay]商品の購入が完了しました．", buf);
-
-	GetUserEmail(user.hash, user.email);
 	for(k = 0; k<i; k++){
 		InsertBuyHistory(user, products[k]);
 	}
@@ -153,6 +152,7 @@ void ChargeMoney(int sock)
 	user.money += money;
 	if (UpdateUserMoneyValue(user) == DB_NO_ERROR)
 	{
+		GetUserEmail(user.hash, user.email);
 		SendCommand(sock, "FIN");
 		char buf[MESSAGE_MAX_LENGTH] = {0};
 		snprintf(buf, MESSAGE_MAX_LENGTH, 
@@ -208,6 +208,7 @@ void RegisterUser(int sock)
 
 	if (InsertUserInfo(user) == DB_NO_ERROR)
 	{
+		//GetUserEmail(user.hash, user.email);
 		SendCommand(sock, "FIN");
 		char buf[MESSAGE_MAX_LENGTH] = {0};
 		snprintf(buf, MESSAGE_MAX_LENGTH, 

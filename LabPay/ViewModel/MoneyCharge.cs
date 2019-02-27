@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -108,6 +109,8 @@ namespace LabPay.ViewModel
             var passwordBox = parameter as PasswordBox;
             var hash = CalcHash.Sha256(passwordBox.Password);
             passwordBox.Password = "";
+            InputPane.GetForCurrentView().TryHide();
+            InputPane.GetForCurrentView().Visible = false;
             await BeginChargeMoney(hash);
         }
 
